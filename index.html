@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jade & York — Gordes, Provence</title>
+<link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Kalam:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#12362a; --surface:#16412f; --surface-2:#1b4a36;
+    --cream:#f6f1e3; --cream-dim:#cfc6ac; --cream-faint:#8fa895;
+    --line: rgba(246,241,227,0.35); --line-soft: rgba(246,241,227,0.18);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0; background:var(--bg); color:var(--cream);
+    font-family:'Kalam', cursive; font-weight:400; line-height:1.7;
+    position:relative;
+  }
+  h1,h2,h3{ font-family:'Permanent Marker', cursive; font-weight:400; color:var(--cream); margin:0; line-height:1.15; }
+  .container{ max-width:900px; margin:0 auto; padding:0 60px; position:relative; z-index:2; }
+  section{ padding:70px 0; }
+  .center{ text-align:center; }
+
+  /* ---------- decorative wavy frame ---------- */
+  .frame-v{ position:fixed; top:0; bottom:0; width:20px; z-index:1;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='44'%3E%3Cpath d='M10,0 C1,7 19,15 10,22 C1,29 19,37 10,44' fill='none' stroke='%23f6f1e3' stroke-opacity='0.4' stroke-width='2'/%3E%3C/svg%3E");
+    background-repeat:repeat-y; background-size:20px 44px;
+  }
+  .frame-v.left{ left:16px; } .frame-v.right{ right:16px; }
+  @media (max-width:640px){ .frame-v{ display:none; } .container{ padding:0 22px; } }
+
+  .wavy-rule{ display:flex; justify-content:center; align-items:center; gap:26px; margin:0 auto; max-width:640px; }
+  .wavy-rule svg{ flex:1; height:16px; width:100%; }
+  .wavy-rule.tight{ max-width:340px; }
+
+  /* ---------- nav ---------- */
+  nav.topnav{
+    position:sticky; top:0; z-index:50; background:rgba(18,54,42,0.92); backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--line-soft); padding:14px 0;
+  }
+  nav.topnav .container{ display:flex; justify-content:center; gap:28px; flex-wrap:wrap; padding:0 20px; }
+  nav.topnav a{ color:var(--cream-dim); text-decoration:none; font-size:15px; font-family:'Kalam',cursive; font-weight:700; letter-spacing:0.02em; transition:color 0.2s; }
+  nav.topnav a:hover{ color:var(--cream); }
+
+  /* ---------- hero ---------- */
+  .hero{ padding-top:60px; text-align:center; }
+  .hero .eyebrow{ font-size:15px; color:var(--cream-faint); letter-spacing:0.08em; text-transform:uppercase; margin-bottom:10px; font-weight:700; }
+  .hero h1{ font-size:clamp(46px, 9vw, 84px); letter-spacing:0.01em; }
+  .hero .sub{ font-size:clamp(20px,3vw,26px); margin-top:14px; color:var(--cream-dim); font-weight:700; }
+  .hero .meta{ margin-top:26px; font-size:19px; font-weight:700; }
+  .hero .meta .sep{ color:var(--cream-faint); margin:0 10px; }
+  .hero .wavy-rule{ margin-bottom:30px; }
+  .hero .wavy-rule.bottom{ margin-top:40px; margin-bottom:0; }
+
+  /* ---------- section heads ---------- */
+  .section-head{ margin-bottom:40px; }
+  .section-head h2{ font-size:clamp(30px,4.5vw,42px); }
+  .section-head p{ color:var(--cream-dim); font-size:16px; max-width:520px; margin:10px auto 0; font-weight:400; }
+
+  /* ---------- weekend / itinerary ---------- */
+  .day{ padding:24px 0; border-bottom:1px dashed var(--line-soft); }
+  .day:last-child{ border-bottom:none; }
+  .day-top{ display:flex; align-items:baseline; gap:14px; flex-wrap:wrap; }
+  .day-date{ font-size:14px; color:var(--cream-faint); font-weight:700; letter-spacing:0.04em; text-transform:uppercase; min-width:150px; }
+  .day-title{ font-family:'Permanent Marker', cursive; font-size:24px; }
+  .day-tag{
+    font-family:'Kalam',cursive; font-weight:700; font-size:11.5px; text-transform:uppercase; letter-spacing:0.06em;
+    border:1.5px solid var(--cream); border-radius:20px; padding:3px 12px; color:var(--cream);
+  }
+  .day-desc{ margin-top:8px; color:var(--cream-dim); font-size:15.5px; max-width:640px; }
+  .day-time{
+    display:inline-block; margin-top:10px; font-family:'Permanent Marker', cursive; font-size:15px;
+    border-bottom:2px solid var(--cream); padding:2px 4px 4px;
+  }
+  .day-tips{ margin-top:12px; font-size:14.5px; color:var(--cream-faint); }
+  .day-tips b{ color:var(--cream-dim); font-family:'Kalam',cursive; }
+
+  /* ---------- travel ---------- */
+  .travel-grid{ display:grid; grid-template-columns:1fr 1fr; gap:36px; }
+  @media (max-width:700px){ .travel-grid{ grid-template-columns:1fr; } }
+  .ticket{ border:2px dashed var(--line); border-radius:14px; padding:26px 24px; position:relative; }
+  .ticket h3{ font-size:24px; margin-bottom:4px; }
+  .ticket .drive{ font-size:15px; color:var(--cream-faint); font-weight:700; margin-bottom:12px; }
+  .ticket ol{ margin:0; padding-left:20px; font-size:14.5px; color:var(--cream-dim); }
+  .ticket li{ margin-bottom:9px; }
+  .travel-note{
+    margin-top:30px; border:1px solid var(--line-soft); border-radius:10px; padding:16px 22px;
+    font-size:14.5px; color:var(--cream-dim); display:flex; gap:12px;
+  }
+
+  /* ---------- stay ---------- */
+  .villa-name{ font-size:26px; margin-bottom:6px; }
+  .villa-tagline{ color:var(--cream-faint); font-size:15px; margin-bottom:22px; font-weight:700; }
+  .stat-row{ display:flex; flex-wrap:wrap; gap:10px; margin-bottom:26px; }
+  .stat-pill{ border:1px solid var(--line); border-radius:20px; padding:7px 16px; font-size:13.5px; font-weight:700; color:var(--cream-dim); }
+  .villa-desc{ font-size:15.5px; color:var(--cream-dim); max-width:680px; margin-bottom:10px; }
+  .villa-facts{ display:grid; grid-template-columns:1fr 1fr; gap:8px 24px; margin:22px 0 28px; font-size:14.5px; color:var(--cream-dim); }
+  @media (max-width:600px){ .villa-facts{ grid-template-columns:1fr; } }
+  .villa-facts div::before{ content:"✦ "; color:var(--cream-faint); }
+  .photo-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin:30px 0; }
+  @media (max-width:700px){ .photo-grid{ grid-template-columns:1fr 1fr; } }
+  .photo-grid img{ width:100%; height:150px; object-fit:cover; border:4px solid var(--cream); border-radius:2px; transform:rotate(-1.5deg); box-shadow:0 6px 16px rgba(0,0,0,0.3); }
+  .photo-grid a:nth-child(2n) img{ transform:rotate(1.5deg); }
+  .airbnb-link{ display:inline-block; margin-top:6px; color:var(--cream); font-weight:700; text-decoration:underline; text-decoration-style:wavy; text-underline-offset:4px; }
+  .avail-box{
+    margin-top:34px; border:1.5px solid var(--cream); border-radius:14px; padding:28px 30px; text-align:center;
+  }
+  .avail-dates{ font-family:'Permanent Marker', cursive; font-size:28px; margin:8px 0 6px; }
+  .avail-dates .arrow{ color:var(--cream-faint); padding:0 10px; }
+  .avail-sub{ font-size:13.5px; color:var(--cream-faint); margin-bottom:14px; }
+  .avail-note{ font-size:15px; color:var(--cream-dim); max-width:520px; margin:0 auto; }
+  .avail-ask{ margin-top:16px; font-family:'Permanent Marker', cursive; font-size:16px; }
+
+  /* ---------- let us know ---------- */
+  .reply-card{ border:1.5px solid var(--line); border-radius:14px; padding:38px; }
+  .mock-tag{ display:inline-block; font-size:12px; border:1px dashed var(--line); border-radius:20px; padding:4px 14px; color:var(--cream-faint); margin-bottom:20px; font-weight:700; }
+  form.reply{ display:grid; gap:18px; }
+  .field label{ display:block; font-family:'Kalam',cursive; font-weight:700; font-size:14px; color:var(--cream-dim); margin-bottom:6px; }
+  .field input, .field select, .field textarea{
+    width:100%; padding:11px 14px; border:none; border-bottom:2px solid var(--line); border-radius:0;
+    background:transparent; font-family:'Kalam',cursive; font-size:15px; color:var(--cream); outline:none;
+  }
+  .field select option{ background:var(--surface); color:var(--cream); }
+  .field input:focus, .field select:focus, .field textarea:focus{ border-color:var(--cream); }
+  .field textarea{ min-height:80px; resize:vertical; }
+  .row-2{ display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+  @media (max-width:640px){ .row-2{ grid-template-columns:1fr; } }
+  .reply button{
+    justify-self:start; background:var(--cream); color:var(--bg); border:none; padding:13px 34px;
+    border-radius:30px; font-family:'Permanent Marker', cursive; font-size:15px; cursor:pointer;
+  }
+
+  /* ---------- icon row ---------- */
+  .icon-row{ display:flex; justify-content:center; gap:60px; margin:10px 0 30px; flex-wrap:wrap; }
+  .icon-row svg{ width:56px; height:56px; }
+
+  .hero-photo{ margin:36px auto 0; width:260px; position:relative; }
+  .hero-photo .frame{ background:var(--cream); padding:10px 10px 30px; transform:rotate(-2deg); box-shadow:0 10px 30px rgba(0,0,0,0.35); position:relative; }
+  .hero-photo .frame img{ width:100%; display:block; }
+  .hero-photo .ph-placeholder{ width:100%; aspect-ratio:16/10; background:repeating-linear-gradient(135deg, rgba(18,54,42,0.08), rgba(18,54,42,0.08) 10px, rgba(18,54,42,0.15) 10px, rgba(18,54,42,0.15) 20px); display:flex; align-items:center; justify-content:center; color:var(--bg); font-family:'Kalam',cursive; font-weight:700; font-size:14px; text-align:center; padding:10px; }
+  .hero-photo .cap{ text-align:center; color:var(--bg); font-family:'Permanent Marker',cursive; font-size:14px; margin-top:6px; }
+  .hero-photo .tape{ position:absolute; top:-12px; left:50%; transform:translateX(-50%) rotate(-3deg); width:64px; height:24px; background:rgba(246,241,227,0.5); border:1px solid rgba(0,0,0,0.06); }
+
+  footer{ text-align:center; padding:20px 20px 70px; }
+  footer .fsign{ font-family:'Permanent Marker', cursive; font-size:26px; }
+  footer .fdate{ font-size:13px; color:var(--cream-faint); margin-top:8px; letter-spacing:0.05em; font-weight:700; }
+</style>
+</head>
+<body>
+
+<div class="frame-v left"></div>
+<div class="frame-v right"></div>
+
+<nav class="topnav">
+  <div class="container">
+    <a href="#weekend">The Weekend</a>
+    <a href="#travel">Getting There</a>
+    <a href="#stay">Stay</a>
+    <a href="#letusknow">Let Us Know</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="container">
+    <div class="wavy-rule">
+      <svg viewBox="0 0 300 16" preserveAspectRatio="none"><path d="M0,8 C25,0 50,16 75,8 C100,0 125,16 150,8" fill="none" stroke="#f6f1e3" stroke-width="2" opacity="0.6"/></svg>
+      <svg viewBox="0 0 300 16" preserveAspectRatio="none"><path d="M150,8 C175,0 200,16 225,8 C250,0 275,16 300,8" fill="none" stroke="#f6f1e3" stroke-width="2" opacity="0.6"/></svg>
+    </div>
+    <div class="eyebrow">you're invited</div>
+    <h1>Jade &amp; York</h1>
+    <div class="sub">A celebration of our wedding!</div>
+    <div class="meta">September 16, 2026<span class="sep">·</span>Gordes, Provence, France</div>
+    <div class="hero-photo">
+      <div class="tape"></div>
+      <div class="frame">
+        <img src="Jade%20Toomey%20-%202026-07-20%2010.07.35.jpg" alt="Jade and York" style="filter:grayscale(1) contrast(1.05);">
+      </div>
+      <div class="cap">that's us</div>
+    </div>
+    <div class="wavy-rule bottom">
+      <svg viewBox="0 0 300 16" preserveAspectRatio="none"><path d="M0,8 C25,0 50,16 75,8 C100,0 125,16 150,8" fill="none" stroke="#f6f1e3" stroke-width="2" opacity="0.6"/></svg>
+      <svg viewBox="0 0 300 16" preserveAspectRatio="none"><path d="M150,8 C175,0 200,16 225,8 C250,0 275,16 300,8" fill="none" stroke="#f6f1e3" stroke-width="2" opacity="0.6"/></svg>
+    </div>
+  </div>
+</header>
+
+<!-- THE WEEKEND -->
+<section id="weekend">
+  <div class="container">
+    <div class="section-head center">
+      <h2>The Weekend</h2>
+      <p>Key moments are marked — everything else is yours to wander.</p>
+    </div>
+
+    <div class="day">
+      <div class="day-top"><span class="day-date">Mon · Sept 14</span><span class="day-title">Arrivals begin</span></div>
+      <div class="day-desc">A few of you will start arriving today. Come by <strong>any time after 5:00 PM</strong>. No rush if you're coming later in the week.</div>
+    </div>
+
+    <div class="day">
+      <div class="day-top"><span class="day-date">Tue · Sept 15</span><span class="day-title">Welcome Drinks</span><span class="day-tag">Key Event</span></div>
+      <div class="day-desc">Come meet everyone before the big day. 📍 <em>[Bar name — TBC]</em></div>
+      <div class="day-time">🥂 6:00 PM (time TBC)</div>
+      <div class="day-tips"><b>Worth doing beforehand:</b> Gordes' Tuesday morning market — oils, lavender, cheese, right in the village.<br><br><b>A few spots that could suit a group of ~25 (optional, venue still TBC):</b>
+        <ul style="margin:6px 0 0; padding-left:18px;">
+          <li>Le Cercle Républicain — casual village bar/café right on the square</li>
+          <li>Le Bar, Airelles Gordes La Bastide — smart terrace bar with Luberon views, worth booking ahead for a group</li>
+          <li>Bastide de Gordes Wine Cellar — private wine cellar tasting, good for a seated group</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="day">
+      <div class="day-top"><span class="day-date">Wed · Sept 16</span><span class="day-title">The Wedding</span><span class="day-tag">Key Event</span></div>
+      <div class="day-desc">The day itself — here's the running order:</div>
+      <div style="margin-top:14px; display:grid; gap:10px;">
+        <div><span class="day-time">4:30 PM</span> <span style="color:var(--cream-dim); font-size:15px;">Guests arrive &amp; take their seats</span></div>
+        <div><span class="day-time">5:00 PM</span> <span style="color:var(--cream-dim); font-size:15px;">Ceremony begins 💍</span></div>
+        <div><span class="day-time">5:30 – 7:00 PM</span> <span style="color:var(--cream-dim); font-size:15px;">Drinks, canapés, photos &amp; a mingle</span></div>
+        <div><span class="day-time">7:00 PM</span> <span style="color:var(--cream-dim); font-size:15px;">Dinner is served</span></div>
+        <div><span class="day-time">Later</span> <span style="color:var(--cream-dim); font-size:15px;">Dancing 💃</span></div>
+      </div>
+    </div>
+
+    <div class="day">
+      <div class="day-top"><span class="day-date">Thu · Sept 17</span><span class="day-title">A day to breathe</span></div>
+      <div class="day-desc">Nothing planned — sleep in, nurse the celebration, explore at your own pace.</div>
+      <div class="day-tips"><b>Worth doing:</b> Sénanque Abbey &amp; its lavender fields (4 km) · the ochre cliffs at Roussillon (15 min) · a long lunch in Bonnieux, Ménerbes or Lourmarin (20–30 min).</div>
+    </div>
+
+    <div class="day">
+      <div class="day-top"><span class="day-date">Fri · Sept 18</span><span class="day-title">Farewell</span></div>
+      <div class="day-desc">Checkout is <strong>before 10:00 AM</strong>. Safe travels, and thank you for being part of our weekend.</div>
+    </div>
+  </div>
+</section>
+
+<!-- GETTING THERE -->
+<section id="travel">
+  <div class="container">
+    <div class="section-head center">
+      <h2>Getting There</h2>
+      <p>Gordes is proper countryside — a rental car is strongly recommended either way you fly in.</p>
+    </div>
+
+    <div class="travel-grid">
+      <div class="ticket">
+        <h3>From Nice</h3>
+        <div class="drive">✈ ~2h30 by car</div>
+        <ol>
+          <li>Fly into Nice Côte d'Azur (NCE)</li>
+          <li><strong>Drive:</strong> A8 west, then A7/A51 toward Avignon, exit via D900 &amp; D2 into Gordes</li>
+          <li><strong>Or train + car:</strong> TGV to Avignon (~2h40), pick up a rental car, ~45 min drive to Gordes</li>
+        </ol>
+      </div>
+      <div class="ticket">
+        <h3>From Marseille</h3>
+        <div class="drive">✈ ~1h15 by car</div>
+        <ol>
+          <li>Fly into Marseille Provence (MRS)</li>
+          <li><strong>Drive:</strong> A7 north toward Avignon, exit at Cavaillon, follow D2 into Gordes</li>
+          <li><strong>Or train + car:</strong> TGV to Avignon (~35 min), pick up a rental car, ~45 min drive to Gordes</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="travel-note">
+      <span>🚕</span>
+      <div>Taxis and rideshares are scarce out here. If you're not renting a car, let us know in the form below and we'll help arrange a shared transfer with other guests.</div>
+    </div>
+  </div>
+</section>
+
+<!-- STAY -->
+<section id="stay">
+  <div class="container">
+    <div class="section-head center">
+      <h2>Where You'll Stay</h2>
+    </div>
+
+    <div class="villa-name">🏡 An Artist's House Since 1964</div>
+    <div class="villa-tagline">16th-century farmhouse · Gordes, Provence</div>
+
+    <div class="stat-row">
+      <span class="stat-pill">10 bedrooms</span>
+      <span class="stat-pill">24 beds</span>
+      <span class="stat-pill">6.5 bathrooms</span>
+      <span class="stat-pill">3 ha garden</span>
+      <span class="stat-pill">14m × 5m infinity pool</span>
+      <span class="stat-pill">Mountain &amp; vineyard views</span>
+    </div>
+
+    <p class="villa-desc">
+      We fell for this place immediately — a 16th-century farmhouse that's been an artist's home
+      since 1964, split into two wings each with their own kitchen and living room, set in three
+      hectares of garden with an infinity pool and pool house. There's plenty of room for everyone.
+    </p>
+
+    <div class="villa-facts">
+      <div>Self check-in with a key safe</div>
+      <div>Dedicated workspace with Wi-Fi</div>
+      <div>Pets allowed</div>
+      <div>Four independent bathrooms</div>
+    </div>
+
+    <div class="photo-grid">
+      <a href="https://www.airbnb.com.au/rooms/51348982" target="_blank" rel="noopener"><img src="https://a0.muscache.com/im/pictures/miso/Hosting-51348982/original/0afa473b-4c7f-49f1-b1f9-84b309caa981.jpeg?im_w=720" alt="The villa in Gordes"></a>
+      <a href="https://www.airbnb.com.au/rooms/51348982" target="_blank" rel="noopener"><img src="https://a0.muscache.com/im/pictures/miso/Hosting-51348982/original/35d50a8f-258d-4a94-81a0-fcdeae06cd1a.jpeg?im_w=720" alt="The villa in Gordes"></a>
+      <a href="https://www.airbnb.com.au/rooms/51348982" target="_blank" rel="noopener"><img src="https://a0.muscache.com/im/pictures/miso/Hosting-51348982/original/b5386f4f-586e-4234-9e5e-adf6fcd69b7a.jpeg?im_w=720" alt="The villa in Gordes"></a>
+      <a href="https://www.airbnb.com.au/rooms/51348982" target="_blank" rel="noopener"><img src="https://a0.muscache.com/im/pictures/miso/Hosting-51348982/original/5e7a1cd4-9c99-430b-a6b3-d4f2479d6d52.jpeg?im_w=720" alt="The villa in Gordes"></a>
+      <a href="https://www.airbnb.com.au/rooms/51348982" target="_blank" rel="noopener"><img src="https://a0.muscache.com/im/pictures/miso/Hosting-51348982/original/229844cf-2841-46c9-8f61-fe558ddda27b.jpeg?im_w=720" alt="The villa in Gordes"></a>
+      <a href="https://www.airbnb.com.au/rooms/51348982" target="_blank" rel="noopener"><img src="https://a0.muscache.com/im/pictures/miso/Hosting-51348982/original/a81c7e58-62a6-4196-930c-1987381ebc66.jpeg?im_w=720" alt="Living room"></a>
+    </div>
+    <a class="airbnb-link" href="https://www.airbnb.com.au/rooms/51348982" target="_blank" rel="noopener">See the full listing &amp; all photos on Airbnb ↗</a>
+
+    <div class="avail-box">
+      <div style="font-weight:700;">43 Chemin des Roberts, Gordes, 84220, France</div>
+      <div class="avail-dates">Mon 14th <span class="arrow">→</span> Fri 18th</div>
+      <div class="avail-sub">CHECK-IN ANY TIME AFTER 5:00 PM · CHECKOUT BEFORE 10:00 AM</div>
+      <div class="avail-note">
+        The house is ours for this window and everyone's welcome to stay for as much or as little of
+        it as suits your travel. Most guests are planning on 2–3 nights to cover welcome drinks
+        through the wedding — a few will arrive earlier on Monday.
+      </div>
+      <div class="avail-ask">📝 Tell us how many nights you need in the form below!</div>
+    </div>
+  </div>
+</section>
+
+<!-- LET US KNOW -->
+<section id="letusknow">
+  <div class="container">
+    <div class="section-head center">
+      <h2>Let Us Know</h2>
+      <p>We already know who's celebrating with us on the day — this is just to sort out your stay and your plate.</p>
+    </div>
+
+    <div class="reply-card">
+      <span class="mock-tag">Mockup only — not yet wired up to send anywhere</span>
+      <form class="reply" onsubmit="return false;">
+        <div class="field"><label>Full Name</label><input type="text" placeholder="Jane Smith"></div>
+        <div class="row-2">
+          <div class="field"><label>Nights needed at the house</label>
+            <select>
+              <option>Not staying at the house</option>
+              <option>1 night</option><option>2 nights</option><option>3 nights</option><option>4 nights</option>
+            </select>
+          </div>
+          <div class="field"><label>Arrival date</label><input type="date" min="2026-09-14" max="2026-09-18"></div>
+        </div>
+        <div class="field"><label>Dietary requirements or allergies</label><textarea placeholder="e.g. vegetarian, gluten-free, nut allergy..."></textarea></div>
+        <div class="field"><label>Anything else we should know?</label><textarea placeholder="Travel plans, transfer help, questions..."></textarea></div>
+        <button type="submit">Send</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<div class="icon-row">
+  <svg viewBox="0 0 64 64" fill="none" stroke="#f6f1e3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M24 8 L40 8 L36 30 C36 38 28 38 28 30 Z"/><line x1="32" y1="38" x2="32" y2="54"/><line x1="22" y1="54" x2="42" y2="54"/><line x1="24" y1="8" x2="40" y2="8"/><path d="M25 14 L39 14" opacity="0.5"/></svg>
+  <svg viewBox="0 0 64 64" fill="none" stroke="#f6f1e3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 44 L32 14 L54 44 Z"/><circle cx="24" cy="36" r="1.6" fill="#f6f1e3"/><circle cx="34" cy="32" r="1.6" fill="#f6f1e3"/><circle cx="30" cy="40" r="1.6" fill="#f6f1e3"/></svg>
+  <svg viewBox="0 0 64 64" fill="none" stroke="#f6f1e3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="22" cy="30" r="7"/><circle cx="34" cy="24" r="7"/><circle cx="34" cy="38" r="7"/><circle cx="46" cy="30" r="7"/><line x1="30" y1="12" x2="34" y2="17"/></svg>
+</div>
+
+<footer>
+  <div class="wavy-rule tight" style="margin-bottom:26px;">
+    <svg viewBox="0 0 300 16" preserveAspectRatio="none"><path d="M0,8 C25,0 50,16 75,8 C100,0 125,16 150,8 C175,0 200,16 225,8 C250,0 275,16 300,8" fill="none" stroke="#f6f1e3" stroke-width="2" opacity="0.6"/></svg>
+  </div>
+  <div class="fsign">With so much love, Jade &amp; York</div>
+  <div class="fdate">SEPTEMBER 16, 2026 · GORDES, PROVENCE</div>
+</footer>
+
+</body>
+</html>
