@@ -334,18 +334,18 @@
     <div class="reply-card">
       <span class="mock-tag">Mockup only — not yet wired up to send anywhere</span>
       <form class="reply" onsubmit="return false;">
-        <div class="field"><label>Full Name</label><input type="text" placeholder="Jane Smith"></div>
+        <div class="field"><label for="rsvp-name">Full Name</label><input id="rsvp-name" name="name" type="text" autocomplete="name" required placeholder="Jane Smith"></div>
         <div class="row-2">
-          <div class="field"><label>Nights needed at the house</label>
-            <select>
+          <div class="field"><label for="rsvp-nights">Nights needed at the house</label>
+            <select id="rsvp-nights" name="nights">
               <option>Not staying at the house</option>
               <option>1 night</option><option>2 nights</option><option>3 nights</option><option>4 nights</option>
             </select>
           </div>
-          <div class="field"><label>Arrival date</label><input type="date" min="2026-09-14" max="2026-09-18"></div>
+          <div class="field"><label for="rsvp-arrival">Arrival date</label><input id="rsvp-arrival" name="arrival" type="date" min="2026-09-14" max="2026-09-18"></div>
         </div>
-        <div class="field"><label>Dietary requirements or allergies</label><textarea placeholder="e.g. vegetarian, gluten-free, nut allergy..."></textarea></div>
-        <div class="field"><label>Anything else we should know?</label><textarea placeholder="Travel plans, transfer help, questions..."></textarea></div>
+        <div class="field"><label for="rsvp-dietary">Dietary requirements or allergies</label><textarea id="rsvp-dietary" name="dietary" placeholder="e.g. vegetarian, gluten-free, nut allergy..."></textarea></div>
+        <div class="field"><label for="rsvp-notes">Anything else we should know?</label><textarea id="rsvp-notes" name="notes" placeholder="Travel plans, transfer help, questions..."></textarea></div>
         <button type="submit">Send</button>
       </form>
     </div>
